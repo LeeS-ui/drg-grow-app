@@ -788,7 +788,7 @@ const scrTo=y=>{const e=scrEl();if(e)e.scrollTop=y;else window.scrollTo(0,y)};
 function fitDevice(){const d=document.querySelector('.device');if(d)d.style.setProperty('--z',Math.min(1,(innerHeight-16)/866).toFixed(3))}
 addEventListener('resize',fitDevice);fitDevice();
 const I=(n,z=20)=>`<i class="ic ic-${n}" style="--s:${z}px"></i>`;
-const S={records:[],prods:null,cur:'p1',screen:'start',tab:'home',stack:[],q:0,ans:{},checkin:{feel:null,sev:0,cause:null,memo:''},
+const S={records:[],prods:null,cur:'p1',screen:'start',tab:'home',stack:[],q:0,ans:{},checkin:{feel:null,sev:0,cause:null},
  routine:{am:[1,1,0,0,0],pm:[0,0,0,0,0]},rtab:'am',notif:{a:1,b:1,c:1,d:1,e:0},period:'30일',ctab:'피부고민',lib:'고민',
  chat:[{k:'g',t:'안녕하세요, 로이예요. 지금 피부 이야기를 들려주세요.'},{k:'g',t:'궁금한 것부터 이야기해 주세요. 필요한 내용은 대화하면서 함께 알아갈게요.'},{k:'card',t:'TODAY\'S SKIN CALM',h:'자극 없는 편안한 스킨 루틴 솔루션',s:'민감도 체크 · 3분 소요'},{k:'g',t:'아래에서 골라 시작하거나 직접 입력해도 돼요.'},{k:'q',t:['피부 고민 묻기','오늘 피부 상태 기록하기','웹에서 시작한 결과 가져오기']}]};
 try{Object.assign(S,JSON.parse(localStorage.getItem('grow')||'{}'))}catch(e){}
@@ -810,7 +810,7 @@ function addProd(){const c=[{img:'r2',name:'레드 블레미쉬 클리어 수딩
  S.ctab2='use';S.stack=[];S.tab='my';go('closet')}
 function stopProd(){const q=P();q.st='stop';S.stopModal=0;S.ctab2='stop';save();toast('사용을 중단했어요');S.stack=[];S.tab='my';go('closet')}
 const SC=[];
-const go=(s,push)=>{if(s==='checkin'&&push)S.checkin={feel:null,sev:0,cause:null,memo:''};if(push){S.stack.push(S.screen);SC.push(scrY())}S.screen=s;render();scrTo(0)};
+const go=(s,push)=>{if(s==='checkin'&&push)S.checkin={feel:null,sev:0,cause:null};if(push){S.stack.push(S.screen);SC.push(scrY())}S.screen=s;render();scrTo(0)};
 const back=()=>{const y=S.stack.length?(SC.pop()||0):0;S.screen=S.stack.pop()||S.tab;while(SC.length>S.stack.length)SC.pop();render();scrTo(y)};
 const tab=t=>{S.tab=t;S.stack=[];SC.length=0;S.screen=t;render();scrTo(0)};
 const csb=()=>`<button class="hb" aria-label="로이와 대화" onclick="go('chat',1)">${I('chat-sparkle',20)}</button>`;
@@ -944,7 +944,7 @@ checkin:()=>{const c=S.checkin,sz=[40,30,24,30,40];
  <div class="row between" style="margin:12px 6px 4px">${sz.map((z,i)=>`<button onclick="S.checkin.sev=${i+1};render()" style="width:${z}px;height:${z}px;border-radius:50%;border:1.2px solid ${i>2?'var(--bad)':'var(--brand)'};display:grid;place-items:center;background:${c.sev===i+1?'#b8c2bd':'#fff'}" aria-label="${i+1}단계" aria-pressed="${c.sev===i+1}">${c.sev===i+1?'<span style="color:#fff;font-size:12px">✓</span>':''}</button>`).join('')}</div><div class="row between sub" style="font-size:10px;padding:0 4px"><span>매우 약함</span><span>매우 강함</span></div>
  <div class="card row between" style="width:100%;margin:16px 0;padding:11px 14px;border:1px solid var(--line);font-size:11px"><span>${I('sun',18)} 오늘 환경 · 34°C · 습도 38% · 자외선 높음</span></div>
  <div class="row between"><b style="color:var(--brand)">Q2. 오늘 피부에 영향을 준 것 같나요?</b><span class="sub" style="font-size:11px;font-weight:700">${c.cause?1:0}개 선택됨</span></div><div class="grid2" style="margin-top:10px">${['수면 부족','제품 변경','스트레스','잘 모르겠어요','날씨·환경'].map(t=>`<button class="opt ${c.cause===t?'on':''}" style="margin:0 0 0;font-weight:700" aria-pressed="${c.cause===t}" onclick="S.checkin.cause='${t}';render()"><span>${t}</span><i class="dot"></i></button>`).join('')}</div>
- <b style="display:block;margin:20px 0 8px">오늘의 루틴 및 메모</b><div class="card row between" style="padding:14px;margin:0"><input id="memo" aria-label="오늘의 루틴 및 메모" style="border:0;background:none;font:inherit;font-weight:700;width:100%;color:var(--fg)" value="${esc(c.memo||'')}" oninput="S.checkin.memo=this.value" maxlength="80">${I('edit',18)}</div>
+ <b style="display:block;margin:20px 0 8px">오늘의 루틴 및 메모</b><div class="card row between" style="padding:14px;margin:0"><input id="memo" aria-label="오늘의 루틴 및 메모" style="border:0;background:none;font:inherit;font-weight:700;width:100%;color:var(--fg)" value="${esc(c.memo!==undefined?c.memo:'수면 시간 6시간, 야외 활동 2시간')}" oninput="S.checkin.memo=this.value" maxlength="80">${I('edit',18)}</div>
  <div style="margin:20px 0 8px"><b>사진 기록</b> <span class="sub">(선택)</span></div><button class="card mint row" style="width:100%;text-align:left;gap:14px;padding:18px" onclick="go('perm',1)"><span style="width:52px;height:52px;border-radius:50%;background:#fff;display:grid;place-items:center">${I('camera',24)}</span><span><b>피부 상태 사진 남기기</b><div class="sub">변화 분석을 위한 비공개 안심 보관</div></span></button>
  <div style="text-align:center;margin-top:24px;font-size:12px">상세하게 기록하기</div><button class="btn" style="font-size:16px;font-weight:700;margin-top:10px" onclick="saveCheckin()">오늘 기록 저장</button><p class="sub" style="text-align:center;font-size:10px;margin-top:10px">정확한 정보를 입력할수록 정밀한 분석이 가능합니다.</p>`},
 explore:()=>`<span hidden class="b2 b2-explore"></span>${hdr('Skin Library',csb()+bellb()+srcb())}<h1 class="design-explore" style="font-size:22px;font-weight:700;margin:4px 0 0">탐색</h1><p class="sub">내 피부에 필요한 정보를 찾아보세요.</p>

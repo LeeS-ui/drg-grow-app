@@ -822,7 +822,7 @@ const tab=t=>{S.tab=t;S.stack=[];SC.length=0;S.screen=t;render();scrTo(0)};
 const csb=()=>`<button class="hb" aria-label="로이와 대화" onclick="go('chat',1)">${I('chat-sparkle',20)}</button>`;
 function closeWin(){back()}
 const cls=()=>`<button class="hb" aria-label="닫기" onclick="closeWin()">${I('close',24)}</button>`;
-const bellb=()=>`<button class="hb" aria-label="알림" onclick="go('settings',1)">${I('bell',24)}</button>`;
+const bellb=()=>`<button class="hb" aria-label="알림" onclick="toast('아직 지원하지 않는 기능입니다')">${I('bell',24)}</button>`;
 const srcb=()=>`<button class="hb" aria-label="검색" onclick="go('libres',1)">${I('search',24)}</button>`;
 const hdr=(t,right='',nb)=>`<div class="top">${nb?'<span></span>':`<button onclick="back()" aria-label="뒤로">${I('left',22)}</button>`}<span class="t">${t}</span><span>${right.includes('ic-close')?`<button aria-label="닫기" onclick="closeWin()">${right}</button>`:right}</span></div>`;
 const tabs=()=>`<nav class="tabs">${[['home','홈','home'],['record','기록','survey'],['explore','탐색','compass'],['routine','루틴','checklist'],['my','MY','user']].map(([k,l,i])=>`<button class="${S.tab===k?'on':''}" ${S.tab===k?'aria-current="page"':''} onclick="tab('${k}')">${I(S.tab===k?i+'-f':i,24)}${l}</button>`).join('')}</nav>`;
